@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Shield,
   Layers,
+  Truck,
 } from 'lucide-react';
 import { useCurrentUser, useDeviations, useInventory } from '../../services/db/useDatabase';
 import { UserRole } from '../../types';
@@ -71,6 +72,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Boxes,
       badge: lowStockItems.length > 0 ? `${lowStockItems.length}` : undefined,
       badgeVariant: 'warning',
+      allowedRoles: ['OWNER', 'ADMIN', 'PRODUCTION', 'AUDITOR'],
+    },
+    {
+      id: 'purchases',
+      label: 'Purchases',
+      icon: Truck,
       allowedRoles: ['OWNER', 'ADMIN', 'PRODUCTION', 'AUDITOR'],
     },
     {

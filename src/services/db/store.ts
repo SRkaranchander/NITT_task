@@ -622,6 +622,70 @@ class DatabaseEngine {
     return order;
   }
 
+  public modifyOrder(orderId: string, items: { productId: string; quantity: number; unitPrice: number }[], reason: string): SalesOrder {
+    const order = this.state.orders.find((o) => o.id === orderId);
+    if (!order) throw new Error('Order not found');
+    if (order.status !== 'SUBMITTED' && order.status !== 'UNDER_REVIEW') {
+      throw new Error('Only submitted orders can be modified before approval');
+    }
+    const previous = JSON.parse(JSON.stringify(order));
+
+    let subtotal = 0;
+    let estimatedGst = 0;
+    let shortageCount = 0;
+
+    order.items = items.map((item, idx) => {
+      const prod = this.state.materials.find((m) => m.id === item.productId);
+      const itemSubtotal = round2(item.quantity * item.unitPrice);
+      const gst = calculateGST(itemSubtotal, order.customerState, prod?.gstRate || 5);
+      subtotal += itemSubtotal;
+      estimatedGst += gst.totalGst;
+      const currentAvailable = prod?.currentStock || 0;
+      const shortage = item.quantity > currentAvailable ? item.quantity - currentAvailable : 0;
+      if (shortage > 0) shortageCount++;
+
+      return {
+        id: `soi-${order.id}-${idx + 1}`,
+        orderId: order.id,
+        productId: item.productId,
+        productName: prod?.name || '',
+        quantity: item.quantity,
+        unit: prod?.unit || 'pkt',
+        unitPrice: item.unitPrice,
+        standardPrice: prod?.defaultSellingPrice || 50,
+        subtotal: itemSubtotal,
+        gstRate: prod?.gstRate || 5,
+        gstAmount: gst.totalGst,
+        totalAmount: gst.totalAmount,
+        availableStockAtOrder: currentAvailable,
+        shortageQuantity: shortage,
+        dispatchedQuantity: 0,
+      };
+    });
+
+    order.subtotal = round2(subtotal);
+    order.estimatedGst = round2(estimatedGst);
+    order.totalAmount = round2(subtotal + estimatedGst);
+    order.stockShortageCount = shortageCount;
+    order.priceOverrideReason = reason;
+    order.updatedAt = new Date().toISOString();
+
+    this.logAudit('ORDER_MODIFIED', 'SALES_ORDER', order.orderNumber, previous, order, reason);
+    this.persistState();
+    return order;
+  }
+
+  public rejectOrder(orderId: string, reason: string): SalesOrder {
+    const order = this.state.orders.find((o) => o.id === orderId);
+    if (!order) throw new Error('Order not found');
+    order.status = 'REJECTED';
+    order.notes = (order.notes ? order.notes + ' | ' : '') + `Rejected: ${reason}`;
+    order.updatedAt = new Date().toISOString();
+    this.logAudit('ORDER_REJECTED', 'SALES_ORDER', order.orderNumber, null, order, reason);
+    this.persistState();
+    return order;
+  }
+
   // ============================================================================
   // 4. BILLING & GST INVOICES MODULE
   // ============================================================================
@@ -714,6 +778,29 @@ class DatabaseEngine {
     customer.totalOutstanding = round2((customer.totalOutstanding || 0) + totalAmount);
 
     this.logAudit('INVOICE_GENERATED', 'INVOICE', invoiceNumber, null, invoice, `Generated GST invoice for ${order.orderNumber}`);
+    this.persistState();
+    return invoice;
+  }
+
+  public cancelInvoice(invoiceId: string, reason: string): Invoice {
+    const invoice = this.state.invoices.find((i) => i.id === invoiceId);
+    if (!invoice) throw new Error('Invoice not found');
+    if (invoice.paidAmount > 0) {
+      throw new Error(`Cannot cancel invoice ${invoice.invoiceNumber}: payments of ₹${invoice.paidAmount} have already been collected against it.`);
+    }
+    const previous = JSON.parse(JSON.stringify(invoice));
+    invoice.status = 'CANCELLED';
+    invoice.cancellationReason = reason;
+    invoice.outstandingAmount = 0;
+
+    // Adjust customer total outstanding
+    const customer = this.state.customers.find((c) => c.id === invoice.customerId);
+    if (customer) {
+      const customerInvoices = this.state.invoices.filter((i) => i.customerId === customer.id && i.status !== 'CANCELLED');
+      customer.totalOutstanding = round2(customerInvoices.reduce((sum, inv) => sum + inv.outstandingAmount, 0));
+    }
+
+    this.logAudit('INVOICE_CANCELLED', 'INVOICE', invoice.invoiceNumber, previous, invoice, reason);
     this.persistState();
     return invoice;
   }
@@ -905,6 +992,42 @@ class DatabaseEngine {
     this.logAudit('PAYMENT_RECEIVED', 'PAYMENT', paymentNumber, null, payment, `Payment of ₹${params.amount} received from ${customer.name}`);
     this.persistState();
     return payment;
+  }
+
+  // Stock Adjustment for Physical Cycle Count
+  public recordStockAdjustment(params: {
+    materialId: string;
+    actualPhysicalCount: number;
+    reason: string;
+  }): InventoryLedgerEntry {
+    const mat = this.state.materials.find((m) => m.id === params.materialId);
+    if (!mat) throw new Error('Material not found');
+
+    const currentStock = this.reconcileStock(mat.id);
+    const diff = round4(params.actualPhysicalCount - currentStock);
+
+    if (Math.abs(diff) < 0.0001) {
+      throw new Error('Physical count matches current ledger balance. No adjustment needed.');
+    }
+
+    const refNumber = `ADJ-${new Date().getFullYear()}-${String(this.state.ledger.length + 1).padStart(3, '0')}`;
+    const entry = this.postLedgerEntry({
+      materialId: mat.id,
+      materialName: mat.name,
+      materialCategory: mat.category,
+      transactionType: diff > 0 ? 'ADJUSTMENT' : 'DAMAGE',
+      quantityIn: diff > 0 ? diff : 0,
+      quantityOut: diff < 0 ? Math.abs(diff) : 0,
+      unit: mat.unit,
+      unitCost: mat.averageCost,
+      sourceDocument: 'STOCK_ADJUSTMENT',
+      referenceNumber: refNumber,
+      notes: `Cycle Count Adjustment: ${params.reason} (Variance: ${diff > 0 ? '+' : ''}${diff} ${mat.unit})`,
+    });
+
+    this.logAudit('STOCK_ADJUSTMENT', 'MATERIAL', mat.sku, { currentStock }, { newStock: params.actualPhysicalCount }, params.reason);
+    this.persistState();
+    return entry;
   }
 
   // ============================================================================

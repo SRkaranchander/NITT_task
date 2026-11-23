@@ -27,7 +27,7 @@ interface SalesOrdersProps {
 
 export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
   const dbState = useDatabase();
-  const { orders, customers, createOrder, approveOrder, createInvoice, dispatchOrder } = useSales();
+  const { orders, customers, createOrder, approveOrder, modifyOrder, rejectOrder, createInvoice, dispatchOrder } = useSales();
   const { currentUser } = useCurrentUser();
   const { finishedGoods } = useInventory();
 
@@ -44,7 +44,9 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
 
   // Price Override Modal State for Admin
   const [overrideModalOpen, setOverrideModalOpen] = useState(false);
-  const [priceOverrideReason, setPriceOverrideReason] = useState('');
+  const [overridePrice, setOverridePrice] = useState(50);
+  const [overrideQty, setOverrideQty] = useState(150);
+  const [priceOverrideReason, setPriceOverrideReason] = useState('Bulk volume customer price adjustment');
 
   const selectedCustomer = customers.find((c) => c.id === selectedCustomerId) || customers[0];
   const selectedProduct = finishedGoods.find((f) => f.id === selectedProductId) || finishedGoods[0];
@@ -472,14 +474,63 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                 {/* Admin Workflow Action Buttons */}
                 {currentUser.role !== 'AUDITOR' && (
                   <div className="space-y-2 pt-2 border-t border-[#282E37]">
+                    {selectedOrder.stockShortageCount > 0 && selectedOrder.status !== 'DISPATCHED' && (
+                      <div className="p-2.5 bg-[#F06B6B]/10 border border-[#F06B6B]/30 space-y-1.5">
+                        <div className="text-[11px] font-mono text-[#F06B6B] font-bold flex items-center gap-1.5">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>Stock Shortage Detected ({selectedOrder.items.find(i => i.shortageQuantity > 0)?.shortageQuantity} pkts)</span>
+                        </div>
+                        <p className="text-[10px] text-[#8993A1]">
+                          Dispatch is blocked until stock is produced. Launch 1 batch to replenish finished goods.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('production-studio')}
+                          className="w-full py-1 bg-[#15191F] hover:bg-[#1C2129] border border-[#282E37] text-[#E5AC58] text-[11px] font-mono font-bold rounded"
+                        >
+                          Launch Production Run →
+                        </button>
+                      </div>
+                    )}
+
                     {selectedOrder.status === 'SUBMITTED' && (
-                      <button
-                        onClick={() => handleApprove(selectedOrder.id)}
-                        className="w-full py-2 bg-[#63D39B] hover:bg-[#72e1a9] text-[#0B0D10] text-xs font-mono font-bold rounded transition-colors flex items-center justify-center gap-1.5"
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Approve Order</span>
-                      </button>
+                      <div className="space-y-1.5">
+                        <button
+                          onClick={() => handleApprove(selectedOrder.id)}
+                          className="w-full py-2 bg-[#63D39B] hover:bg-[#72e1a9] text-[#0B0D10] text-xs font-mono font-bold rounded transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Approve Order</span>
+                        </button>
+
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const item = selectedOrder.items[0];
+                              setOverrideQty(item?.quantity || 150);
+                              setOverridePrice(item?.unitPrice || 50);
+                              setOverrideModalOpen(true);
+                            }}
+                            className="py-1.5 bg-[#15191F] hover:bg-[#1C2129] border border-[#282E37] text-xs font-mono text-[#E5AC58] rounded"
+                          >
+                            Modify Price/Qty
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const reason = prompt('Enter rejection reason:');
+                              if (reason) {
+                                rejectOrder(selectedOrder.id, reason);
+                                alert('Order rejected.');
+                              }
+                            }}
+                            className="py-1.5 bg-[#15191F] hover:bg-[#1C2129] border border-[#282E37] text-xs font-mono text-[#F06B6B] rounded"
+                          >
+                            Reject Order
+                          </button>
+                        </div>
+                      </div>
                     )}
 
                     {selectedOrder.status === 'APPROVED' && (
@@ -511,6 +562,88 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                 )}
               </div>
             ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* ADMIN PRICE & QUANTITY OVERRIDE MODAL */}
+      {overrideModalOpen && selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-[#15191F] border border-[#282E37] p-5 shadow-2xl">
+            <h3 className="text-sm font-bold font-mono text-[#E8EBF0] uppercase tracking-wider mb-3">
+              Modify Order: {selectedOrder.orderNumber}
+            </h3>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div>
+                <label className="block text-[#8993A1] mb-1">Quantity (Packets):</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={overrideQty}
+                  onChange={(e) => setOverrideQty(parseInt(e.target.value) || 0)}
+                  className="w-full bg-[#101318] border border-[#282E37] px-3 py-1.5 text-[#E8EBF0] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#8993A1] mb-1">Unit Selling Price (₹):</label>
+                <input
+                  type="number"
+                  step="0.5"
+                  min="1"
+                  value={overridePrice}
+                  onChange={(e) => setOverridePrice(parseFloat(e.target.value) || 0)}
+                  className="w-full bg-[#101318] border border-[#282E37] px-3 py-1.5 text-[#E8EBF0] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#8993A1] mb-1">Mandatory Override Reason:</label>
+                <input
+                  type="text"
+                  value={priceOverrideReason}
+                  onChange={(e) => setPriceOverrideReason(e.target.value)}
+                  placeholder="e.g. Promotional volume discount"
+                  className="w-full bg-[#101318] border border-[#282E37] px-3 py-1.5 text-[#E8EBF0] outline-none"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#282E37] flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setOverrideModalOpen(false)}
+                  className="px-3 py-1.5 bg-[#101318] border border-[#282E37] text-[#8993A1] hover:text-[#E8EBF0]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      modifyOrder(
+                        selectedOrder.id,
+                        [
+                          {
+                            productId: selectedOrder.items[0]?.productId || 'mat-murukku',
+                            quantity: overrideQty,
+                            unitPrice: overridePrice,
+                          },
+                        ],
+                        priceOverrideReason
+                      );
+                      setOverrideModalOpen(false);
+                      alert('Order quantities and prices updated with audit trail!');
+                    } catch (err: any) {
+                      alert(`Error: ${err.message}`);
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-[#E5AC58] hover:bg-[#F0B969] text-[#0B0D10] font-bold"
+                >
+                  Save Modifications
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

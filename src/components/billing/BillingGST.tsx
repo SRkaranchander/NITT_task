@@ -25,7 +25,7 @@ interface BillingGSTProps {
 }
 
 export const BillingGST: React.FC<BillingGSTProps> = () => {
-  const { invoices } = useSales();
+  const { invoices, cancelInvoice } = useSales();
   const { currentUser } = useCurrentUser();
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
 
@@ -273,6 +273,24 @@ export const BillingGST: React.FC<BillingGSTProps> = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {currentUser.role !== 'AUDITOR' && selectedInvoice.status !== 'CANCELLED' && selectedInvoice.paidAmount === 0 && (
+                    <button
+                      onClick={() => {
+                        const reason = prompt('Enter audit cancellation reason:');
+                        if (reason) {
+                          try {
+                            cancelInvoice(selectedInvoice.id, reason);
+                            alert(`Invoice ${selectedInvoice.invoiceNumber} cancelled and audit trail posted.`);
+                          } catch (err: any) {
+                            alert(err.message);
+                          }
+                        }
+                      }}
+                      className="px-2.5 py-1.5 bg-[#101318] hover:bg-[#F06B6B]/20 border border-[#F06B6B]/40 text-[#F06B6B] text-xs font-mono rounded transition-colors"
+                    >
+                      Cancel Invoice
+                    </button>
+                  )}
                   <button
                     onClick={() => handleDownloadPDF(selectedInvoice)}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E5AC58] hover:bg-[#F0B969] text-[#0B0D10] text-xs font-mono font-bold rounded transition-colors"

@@ -165,7 +165,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 relative">
           {/* Stage 1: Purchases */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('purchases')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               1. Purchases
             </div>
@@ -178,7 +181,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Stage 2: Raw Materials */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('inventory-flow')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               2. Raw Material
             </div>
@@ -191,7 +197,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Stage 3: Production */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('production-studio')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               3. Production Run
             </div>
@@ -204,7 +213,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Stage 4: Finished Goods */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('inventory-flow')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               4. Finished Goods
             </div>
@@ -217,7 +229,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Stage 5: Sales Orders */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('sales-orders')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               5. Sales Orders
             </div>
@@ -230,7 +245,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Stage 6: Dispatches */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('sales-orders')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               6. Dispatched
             </div>
@@ -243,7 +261,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Stage 7: Collections */}
-          <div className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] transition-colors">
+          <div
+            onClick={() => onNavigate('collections')}
+            className="p-3 bg-[#101318] border border-[#282E37] relative group hover:border-[#E5AC58] cursor-pointer transition-colors"
+          >
             <div className="text-[10px] font-mono text-[#8993A1] uppercase mb-1">
               7. Collections
             </div>

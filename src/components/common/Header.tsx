@@ -70,6 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
     'sales-orders': 'Sales & Order Queue',
     'production-studio': 'Production Studio (BOM & Batches)',
     'inventory-flow': 'Inventory Flow & Stock Ledger',
+    'purchases': 'Purchases & Supplier Inflow',
     'deviation-monitor': 'Deviation & Variance Monitor',
     'billing-gst': 'Billing & GST Invoices',
     'collections': 'Collections & Receivables',

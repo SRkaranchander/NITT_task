@@ -42,6 +42,7 @@ export function useInventory() {
       lowStockItems,
       ledger: state.ledger,
       reconcileStock: (id: string) => db.reconcileStock(id),
+      recordStockAdjustment: db.recordStockAdjustment.bind(db),
     };
   }, [state.materials, state.ledger]);
 }
@@ -67,7 +68,10 @@ export function useSales() {
       dispatches: state.dispatches,
       createOrder: db.createSalesOrder.bind(db),
       approveOrder: db.approveOrder.bind(db),
+      modifyOrder: db.modifyOrder.bind(db),
+      rejectOrder: db.rejectOrder.bind(db),
       createInvoice: db.createInvoiceFromOrder.bind(db),
+      cancelInvoice: db.cancelInvoice.bind(db),
       dispatchOrder: db.dispatchOrder.bind(db),
     };
   }, [state.orders, state.invoices, state.customers, state.dispatches]);

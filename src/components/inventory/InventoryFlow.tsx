@@ -14,20 +14,27 @@ import {
   ArrowDownRight,
   RefreshCw,
   Search,
+  Plus,
 } from 'lucide-react';
-import { useDatabase, useInventory } from '../../services/db/useDatabase';
+import { useDatabase, useInventory, useCurrentUser } from '../../services/db/useDatabase';
 import { Badge } from '../common/Badge';
 import { formatINR, formatQty } from '../../utils/math';
 import * as XLSX from 'xlsx';
 
 export const InventoryFlow: React.FC = () => {
   const dbState = useDatabase();
-  const { allMaterials, rawMaterials, packaging, finishedGoods, ledger, reconcileStock } = useInventory();
+  const { allMaterials, rawMaterials, packaging, finishedGoods, ledger, reconcileStock, recordStockAdjustment } = useInventory();
+  const { currentUser } = useCurrentUser();
 
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'RAW_MATERIAL' | 'PACKAGING' | 'FINISHED_GOODS'>('ALL');
   const [selectedMaterialFilter, setSelectedMaterialFilter] = useState<string>('ALL');
   const [ledgerSearchQuery, setLedgerSearchQuery] = useState('');
   const [activeLedgerTab, setActiveLedgerTab] = useState<'all' | 'issues' | 'receipts' | 'dispatches'>('all');
+
+  const [isAdjModalOpen, setIsAdjModalOpen] = useState(false);
+  const [adjMaterialId, setAdjMaterialId] = useState('mat-flour');
+  const [adjCount, setAdjCount] = useState(120);
+  const [adjReason, setAdjReason] = useState('Physical audit cycle count');
 
   const filteredMaterials = useMemo(() => {
     if (activeCategory === 'ALL') return allMaterials;
@@ -125,6 +132,15 @@ export const InventoryFlow: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          {currentUser.role !== 'AUDITOR' && (
+            <button
+              onClick={() => setIsAdjModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#15191F] hover:bg-[#1C2129] border border-[#282E37] text-xs font-mono text-[#E5AC58] rounded transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Stock Adjustment</span>
+            </button>
+          )}
           <button
             onClick={handleExportCSV}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#15191F] hover:bg-[#1C2129] border border-[#282E37] text-xs font-mono text-[#8993A1] hover:text-[#E8EBF0] rounded transition-colors"
@@ -407,6 +423,89 @@ export const InventoryFlow: React.FC = () => {
           </table>
         </div>
       </div>
+      {/* PHYSICAL STOCK COUNT ADJUSTMENT MODAL */}
+      {isAdjModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-[#15191F] border border-[#282E37] p-5 shadow-2xl">
+            <h3 className="text-sm font-bold font-mono text-[#E8EBF0] uppercase tracking-wider mb-3">
+              Physical Stock Cycle Count Adjustment
+            </h3>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div>
+                <label className="block text-[#8993A1] mb-1">Select Material / Product:</label>
+                <select
+                  value={adjMaterialId}
+                  onChange={(e) => {
+                    setAdjMaterialId(e.target.value);
+                    const m = allMaterials.find((mat) => mat.id === e.target.value);
+                    if (m) setAdjCount(m.currentStock);
+                  }}
+                  className="w-full bg-[#101318] border border-[#282E37] px-3 py-1.5 text-[#E8EBF0] outline-none"
+                >
+                  {allMaterials.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.sku}) — Ledger: {m.currentStock} {m.unit}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[#8993A1] mb-1">Actual Physical Counted Quantity:</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  value={adjCount}
+                  onChange={(e) => setAdjCount(parseFloat(e.target.value) || 0)}
+                  className="w-full bg-[#101318] border border-[#282E37] px-3 py-1.5 text-[#E8EBF0] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#8993A1] mb-1">Audit Adjustment Reason:</label>
+                <input
+                  type="text"
+                  value={adjReason}
+                  onChange={(e) => setAdjReason(e.target.value)}
+                  placeholder="e.g. Month-end physical verification"
+                  className="w-full bg-[#101318] border border-[#282E37] px-3 py-1.5 text-[#E8EBF0] outline-none"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#282E37] flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAdjModalOpen(false)}
+                  className="px-3 py-1.5 bg-[#101318] border border-[#282E37] text-[#8993A1] hover:text-[#E8EBF0]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      recordStockAdjustment({
+                        materialId: adjMaterialId,
+                        actualPhysicalCount: adjCount,
+                        reason: adjReason,
+                      });
+                      setIsAdjModalOpen(false);
+                      alert('Stock ledger adjusted and audit trail logged!');
+                    } catch (err: any) {
+                      alert(`Error: ${err.message}`);
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-[#E5AC58] hover:bg-[#F0B969] text-[#0B0D10] font-bold"
+                >
+                  Post Adjustment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
