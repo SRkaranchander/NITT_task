@@ -10,6 +10,10 @@ $$\text{Sales} \longrightarrow \text{Order Verification} \longrightarrow \text{P
 
 ## 1. Overview & Core Philosophy
 
+### Demo walkthrough
+
+[Watch the benchmark walkthrough](demo/benchmark-walkthrough.mp4)
+
 Generic ERPs and accounting software treat inventory as a passive spreadsheet cell that gets overwritten. In industrial snack manufacturing, this causes phantom stock, unrecorded cooking oil absorption, unnoticed packaging damage, and inaccurate profit margins.
 
 **The NOIR Philosophy:**
