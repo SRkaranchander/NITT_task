@@ -43,21 +43,21 @@ export const KpiCard: React.FC<KpiCardProps> = ({
     <div
       onClick={onClick}
       className={clsx(
-        'bg-[#15191F] border border-[#282E37] p-4 transition-all duration-150',
+        'metric-card bg-[#15191F] border border-[#282E37] p-4 transition-all duration-200',
         onClick && 'cursor-pointer hover:bg-[#1C2129]',
         borderHighlight[highlightColor],
         className
       )}
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-mono uppercase tracking-wider text-[#8993A1]">
+        <span className="text-[11px] font-semibold tracking-wide text-[#8993A1]">
           {title}
         </span>
-        {Icon && <Icon className="w-4 h-4 text-[#8993A1]" />}
+        {Icon && <span className="metric-icon"><Icon className="w-[18px] h-[18px] text-[#2F7551]" /></span>}
       </div>
 
       <div className="flex items-baseline justify-between gap-2">
-        <div className="text-2xl font-bold font-mono tracking-tight text-[#E8EBF0]">
+        <div className="metric-value text-2xl font-bold tracking-tight text-[#E8EBF0]">
           {value}
         </div>
         {badge && (

@@ -52,28 +52,161 @@ body {
   box-shadow: 0 0 12px rgba(99, 211, 155, 0.15);
 }
 
-/* The existing screens use Tailwind arbitrary colors. These scoped overrides
-   translate the charcoal palette into a warm, readable light theme while
-   keeping the semantic amber, green, red, and blue status colors intact. */
-html:not(.dark) [class*="bg-[#0B0D10]"] { background-color: #f4f6f2 !important; }
-html:not(.dark) [class*="bg-[#101318]"] { background-color: #ffffff !important; }
-html:not(.dark) [class*="bg-[#15191F]"] { background-color: #ffffff !important; }
-html:not(.dark) [class*="bg-[#1C2129]"] { background-color: #f1f4ef !important; }
-html:not(.dark) [class*="bg-[#282E37]"] { background-color: #e7ece6 !important; }
-html:not(.dark) [class*="border-[#282E37]"] { border-color: #e0e6df !important; }
-html:not(.dark) [class*="border-[#363E4A]"] { border-color: #cfd8cf !important; }
-html:not(.dark) [class*="text-[#E8EBF0]"] { color: #243129 !important; }
-html:not(.dark) [class*="text-[#8993A1]"] { color: #66736a !important; }
-html:not(.dark) [class*="text-[#5A6372]"] { color: #7d8980 !important; }
-html:not(.dark) [class*="hover\:bg-[#15191F]"]:hover { background-color: #f2f5f0 !important; }
-html:not(.dark) [class*="hover\:bg-[#1C2129]"]:hover { background-color: #edf2ec !important; }
+/* NOIR light workspace: paper, leaf green, and a restrained saffron accent. */
+:root {
+  --canvas: #f4f6f1;
+  --surface: #ffffff;
+  --surface-soft: #f8faf7;
+  --ink: #202c24;
+  --muted: #68766c;
+  --line: #e4e9e2;
+  --leaf: #2f7551;
+}
 
-html:not(.dark) body { background: #f4f6f2; color: #243129; }
+html:not(.dark) body {
+  background: var(--canvas);
+  color: var(--ink);
+  background-image: radial-gradient(ellipse at 78% 0%, rgba(216, 233, 215, 0.42), transparent 34rem);
+}
+html:not(.dark) [class*="bg-[#0B0D10]"] { background-color: var(--canvas) !important; }
+html:not(.dark) [class*="bg-[#101318]"] { background-color: var(--surface) !important; }
+html:not(.dark) [class*="bg-[#15191F]"] { background-color: var(--surface) !important; }
+html:not(.dark) [class*="bg-[#1C2129]"] { background-color: var(--surface-soft) !important; }
+html:not(.dark) [class*="bg-[#282E37]"] { background-color: #edf1eb !important; }
+html:not(.dark) [class*="border-[#282E37]"] { border-color: var(--line) !important; }
+html:not(.dark) [class*="border-[#363E4A]"] { border-color: #d5ddd4 !important; }
+html:not(.dark) [class*="text-[#E8EBF0]"] { color: var(--ink) !important; }
+html:not(.dark) [class*="text-[#8993A1]"] { color: var(--muted) !important; }
+html:not(.dark) [class*="text-[#5A6372]"] { color: #879289 !important; }
+html:not(.dark) [class*="text-[#E5AC58]"] { color: #96601f !important; }
+html:not(.dark) [class*="text-[#63D39B]"] { color: #28734c !important; }
+html:not(.dark) [class*="text-[#F0B44D]"] { color: #94620e !important; }
+html:not(.dark) [class*="text-[#F06B6B]"] { color: #b84943 !important; }
+html:not(.dark) [class*="text-[#72A9E8]"] { color: #3b6fa4 !important; }
+html:not(.dark) [class*="hover\:bg-[#15191F]"]:hover { background-color: #f5f8f4 !important; }
+html:not(.dark) [class*="hover\:bg-[#1C2129]"]:hover { background-color: #f0f5ef !important; }
+
+html:not(.dark) .app-shell { background: var(--canvas); }
+html:not(.dark) .app-sidebar {
+  background: rgba(253, 254, 252, 0.96) !important;
+  border-color: #e5eae4 !important;
+  box-shadow: 8px 0 30px rgba(42, 61, 45, 0.035);
+}
+html:not(.dark) .brand-mark {
+  color: #fff !important;
+  background: linear-gradient(145deg, #43865f, #245c3e) !important;
+  border-color: #2f7551 !important;
+  box-shadow: 0 6px 14px rgba(47, 117, 81, 0.2);
+}
+html:not(.dark) aside button[class*="border-l-[#E5AC58]"] {
+  background: #edf6ee !important;
+  color: #205c3c !important;
+  border-color: #dcebdd !important;
+  border-left: 3px solid #39835a !important;
+  box-shadow: inset 0 0 0 1px rgba(47, 117, 81, 0.025);
+}
+html:not(.dark) .app-header {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-color: var(--line) !important;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 4px 18px rgba(32, 51, 37, 0.035);
+}
+html:not(.dark) .app-main {
+  background: transparent !important;
+  background-image: radial-gradient(ellipse at 85% 0%, rgba(223, 236, 221, 0.28), transparent 30rem);
+}
+
+/* Lift panels off the canvas and give dense tables a calmer rhythm. */
+html:not(.dark) [class*="bg-[#15191F]"][class*="border"] {
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(33, 54, 39, 0.045), 0 1px 2px rgba(33, 54, 39, 0.035);
+}
+html:not(.dark) div[class*="bg-[#101318]"][class*="border"] {
+  border-radius: 13px;
+}
+html:not(.dark) button {
+  border-radius: 10px;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+html:not(.dark) button:focus-visible,
+html:not(.dark) [role="button"]:focus-visible {
+  outline: 3px solid rgba(47, 117, 81, 0.24);
+  outline-offset: 2px;
+}
 html:not(.dark) input,
 html:not(.dark) select,
 html:not(.dark) textarea {
-  color: #243129;
+  color: var(--ink);
+  background-color: #fbfcfa !important;
+  border-color: #dfe6de !important;
+  border-radius: 9px;
 }
 html:not(.dark) input::placeholder,
 html:not(.dark) textarea::placeholder { color: #8a968d; }
-html:not(.dark) ::selection { background: rgba(47, 117, 81, 0.16); color: #243129; }
+html:not(.dark) table thead { background: #f5f8f4 !important; }
+html:not(.dark) table tbody tr { transition: background-color 140ms ease; }
+html:not(.dark) table tbody tr:hover { background-color: #f7faf6; }
+html:not(.dark) ::selection { background: rgba(47, 117, 81, 0.16); color: var(--ink); }
+
+html:not(.dark) .dashboard-page { max-width: 1500px; }
+html:not(.dark) .dashboard-hero {
+  min-height: 184px;
+  border-radius: 24px !important;
+  border-color: #dce9dc !important;
+  background: linear-gradient(115deg, #fdfefb 0%, #f0f7ee 62%, #e5f0e3 100%) !important;
+  box-shadow: 0 14px 36px rgba(38, 76, 47, 0.075) !important;
+}
+html:not(.dark) .dashboard-hero::after {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  right: 6%;
+  top: -155px;
+  border: 1px solid rgba(47, 117, 81, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 32px rgba(47, 117, 81, 0.035), 0 0 0 68px rgba(47, 117, 81, 0.025);
+  pointer-events: none;
+}
+html:not(.dark) .dashboard-hero h1 {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: clamp(1.65rem, 2.8vw, 2.25rem);
+  letter-spacing: -0.045em;
+  color: #203e2c !important;
+}
+html:not(.dark) .dashboard-hero button { position: relative; z-index: 1; }
+html:not(.dark) .dashboard-hero button:first-child {
+  box-shadow: 0 7px 16px rgba(47, 117, 81, 0.18);
+}
+html:not(.dark) .metric-card {
+  min-height: 142px;
+  padding: 18px !important;
+  border-radius: 17px !important;
+  border-left-width: 3px !important;
+}
+html:not(.dark) .metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(33, 54, 39, 0.09) !important;
+}
+html:not(.dark) .metric-icon {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #eef6ee;
+}
+html:not(.dark) .metric-value {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 1.75rem;
+  letter-spacing: -0.045em;
+  color: #203e2c !important;
+}
+html:not(.dark) .dashboard-panel { border-radius: 18px !important; }
+
+@media (max-width: 640px) {
+  html:not(.dark) .dashboard-page { padding: 16px !important; }
+  html:not(.dark) .dashboard-hero { border-radius: 18px !important; }
+  html:not(.dark) .metric-card { min-height: 132px; padding: 14px !important; }
+}

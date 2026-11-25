@@ -163,7 +163,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         className={clsx(
-          'fixed md:static inset-y-0 left-0 z-50 flex flex-col bg-[#101318] border-r border-[#282E37] transition-all duration-200 select-none shrink-0',
+          'app-sidebar fixed md:static inset-y-0 left-0 z-50 flex flex-col bg-[#101318] border-r border-[#282E37] transition-all duration-200 select-none shrink-0',
           isCollapsed ? 'w-16' : 'w-64',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
@@ -175,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => handleNavClick('command-center')}
           >
             {/* NOIR Monogram Logo */}
-            <div className="w-8 h-8 rounded bg-[#15191F] border border-[#282E37] flex items-center justify-center font-mono font-bold text-sm tracking-wider text-[#E8EBF0] shrink-0">
+            <div className="brand-mark w-9 h-9 rounded-xl bg-[#15191F] border border-[#282E37] flex items-center justify-center font-mono font-bold text-sm tracking-wider text-[#E8EBF0] shrink-0">
               N<span className="text-[#E5AC58]">.</span>
             </div>
             {!isCollapsed && (

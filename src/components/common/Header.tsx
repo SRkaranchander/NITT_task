@@ -95,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="h-16 border-b border-[#282E37] bg-[#101318] px-4 md:px-6 flex items-center justify-between sticky top-0 z-30 select-none">
+    <header className="app-header h-16 border-b border-[#282E37] bg-[#101318] px-4 md:px-6 flex items-center justify-between sticky top-0 z-30 select-none">
       {/* Left: Breadcrumbs & Mobile Toggle */}
       <div className="flex items-center gap-3">
         {onToggleMobileMenu && (

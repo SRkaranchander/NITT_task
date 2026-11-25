@@ -23,21 +23,18 @@ Generic ERPs and accounting software treat inventory as a passive spreadsheet ce
 
 ---
 
-## 2. Visual Identity & Industrial Theme
+## 2. Visual Identity & Interface
 
-The application features a dark, technically sophisticated industrial command-center aesthetic:
-- **Main Background:** `#0B0D10`
-- **Sidebar Background:** `#101318`
-- **Panel Surface:** `#15191F`
-- **Elevated Surface:** `#1C2129`
-- **Borders:** `#282E37`
-- **Primary Text:** `#E8EBF0`
-- **Secondary Text:** `#8993A1`
-- **Muted Industrial Amber:** `#E5AC58`
-- **Success Green:** `#63D39B`
-- **Warning Amber:** `#F0B44D`
-- **Critical Red:** `#F06B6B`
-- **Accent Blue:** `#72A9E8`
+The interface uses a light, operations-focused palette designed for long desktop sessions and clear shop-floor status checks:
+- **Canvas:** `#F4F6F1` warm sage-white
+- **Panels:** `#FFFFFF` with soft borders and subtle elevation
+- **Primary Text:** `#202C24` deep charcoal green
+- **Secondary Text:** `#68766C` muted leaf gray
+- **Primary Accent:** `#2F7551` factory green
+- **Saffron Accent:** `#96601F` for production and benchmark highlights
+- **Status Colors:** Green for healthy, amber for warnings, red for critical exceptions, and blue for informational states
+
+The command center prioritizes the benchmark workflow with a production overview, live operating metrics, stock and dispatch pipeline, variance alerts, and recent orders. Role-based navigation keeps the relevant actions close to each user’s daily work.
 
 ---
 

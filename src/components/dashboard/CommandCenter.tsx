@@ -82,9 +82,9 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="dashboard-page p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
       {/* 1. OPERATIONAL HERO BANNER WITH QUICK ACTIONS */}
-      <div className="bg-[#15191F] border border-[#282E37] p-5 md:p-6 rounded-none relative overflow-hidden">
+      <div className="dashboard-hero bg-[#15191F] border border-[#282E37] p-5 md:p-7 relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -158,7 +158,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
       </div>
 
       {/* 2. BALANCED 5-KPI STRIP */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
+      <div className="metrics-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
         <KpiCard
           title="Invoiced Revenue"
           value={formatINR(totalRevenue)}
@@ -235,7 +235,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
       )}
 
       {/* 4. VISUAL PRODUCTION-TO-DISPATCH OPERATIONAL PIPELINE */}
-      <div className="bg-[#15191F] border border-[#282E37] p-5">
+      <div className="dashboard-panel bg-[#15191F] border border-[#282E37] p-5">
         <div className="flex items-center justify-between mb-3.5">
           <div>
             <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[#E8EBF0] flex items-center gap-2">

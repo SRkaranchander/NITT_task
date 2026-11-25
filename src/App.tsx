@@ -56,7 +56,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#0B0D10] text-[#E8EBF0] overflow-hidden">
+    <div className="app-shell flex h-screen bg-[#0B0D10] text-[#E8EBF0] overflow-hidden">
       {/* Persistent Left Sidebar */}
       <Sidebar
         currentTab={currentTab}
@@ -79,7 +79,7 @@ export const App: React.FC = () => {
         />
 
         {/* Scrollable Page Body */}
-        <main className="flex-1 overflow-y-auto bg-[#0B0D10]">
+        <main className="app-main flex-1 overflow-y-auto bg-[#0B0D10]">
           {renderContent()}
         </main>
       </div>
