@@ -3,7 +3,7 @@
 // Sales & Orders Module (Mobile Salesman <60s + Admin Review Queue)
 // ==============================================================================
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ShoppingCart,
   Plus,
@@ -30,12 +30,20 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
   const { orders, customers, createOrder, approveOrder, modifyOrder, rejectOrder, createInvoice, dispatchOrder } = useSales();
   const { currentUser } = useCurrentUser();
   const { finishedGoods } = useInventory();
+  const isSalesman = currentUser.role === 'SALESMAN';
+  const canManageOrders = currentUser.role === 'ADMIN' || currentUser.role === 'OWNER';
+  const canCreateOrders = isSalesman || canManageOrders;
+  const canLaunchProduction = currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'PRODUCTION';
+  const visibleOrders = isSalesman ? orders.filter((order) => order.salesmanId === currentUser.id) : orders;
+  const visibleCustomers = isSalesman
+    ? customers.filter((customer) => customer.salesmanId === currentUser.id)
+    : customers;
 
   const [activeTab, setActiveTab] = useState<'queue' | 'new_order'>('queue');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   // New Order Form State (Mobile-First <60s Flow)
-  const [selectedCustomerId, setSelectedCustomerId] = useState(customers[0]?.id || '');
+  const [selectedCustomerId, setSelectedCustomerId] = useState(visibleCustomers[0]?.id || '');
   const [selectedProductId, setSelectedProductId] = useState(finishedGoods[0]?.id || 'mat-murukku');
   const [orderQuantity, setOrderQuantity] = useState(150);
   const [unitPrice, setUnitPrice] = useState(50);
@@ -48,7 +56,17 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
   const [overrideQty, setOverrideQty] = useState(150);
   const [priceOverrideReason, setPriceOverrideReason] = useState('Bulk volume customer price adjustment');
 
-  const selectedCustomer = customers.find((c) => c.id === selectedCustomerId) || customers[0];
+  useEffect(() => {
+    if (!visibleCustomers.some((customer) => customer.id === selectedCustomerId)) {
+      setSelectedCustomerId(visibleCustomers[0]?.id || '');
+    }
+  }, [currentUser.id, selectedCustomerId, visibleCustomers]);
+
+  useEffect(() => {
+    if (!canCreateOrders && activeTab === 'new_order') setActiveTab('queue');
+  }, [activeTab, canCreateOrders]);
+
+  const selectedCustomer = visibleCustomers.find((c) => c.id === selectedCustomerId) || visibleCustomers[0];
   const selectedProduct = finishedGoods.find((f) => f.id === selectedProductId) || finishedGoods[0];
 
   const subtotal = orderQuantity * unitPrice;
@@ -59,6 +77,7 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
 
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!canCreateOrders) return;
     if (isSubmitting) return; // Prevent duplicate submission
     setIsSubmitting(true);
 
@@ -120,7 +139,7 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
     }
   };
 
-  const selectedOrder = orders.find((o) => o.id === selectedOrderId) || orders[0];
+  const selectedOrder = visibleOrders.find((o) => o.id === selectedOrderId) || visibleOrders[0];
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto">
@@ -148,24 +167,26 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                   : 'text-[#8993A1] hover:text-[#E8EBF0]'
               }`}
             >
-              Order Queue ({orders.length})
+              {isSalesman ? `My Orders (${visibleOrders.length})` : `Order Queue (${visibleOrders.length})`}
             </button>
-            <button
-              onClick={() => setActiveTab('new_order')}
-              className={`px-3 py-1 rounded transition-colors flex items-center gap-1 ${
-                activeTab === 'new_order'
-                  ? 'bg-[#1C2129] text-[#E8EBF0] font-semibold border border-[#363E4A]'
-                  : 'text-[#8993A1] hover:text-[#E8EBF0]'
-              }`}
-            >
-              <Smartphone className="w-3.5 h-3.5 text-[#E5AC58]" />
-              <span>Mobile Order Entry (&lt;60s)</span>
-            </button>
+            {canCreateOrders && (
+              <button
+                onClick={() => setActiveTab('new_order')}
+                className={`px-3 py-1 rounded transition-colors flex items-center gap-1 ${
+                  activeTab === 'new_order'
+                    ? 'bg-[#1C2129] text-[#E8EBF0] font-semibold border border-[#363E4A]'
+                    : 'text-[#8993A1] hover:text-[#E8EBF0]'
+                }`}
+              >
+                <Smartphone className="w-3.5 h-3.5 text-[#E5AC58]" />
+                <span>Mobile Order Entry (&lt;60s)</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {activeTab === 'new_order' ? (
+      {activeTab === 'new_order' && canCreateOrders ? (
         /* FAST MOBILE ORDER ENTRY (<60 SECONDS) */
         <div className="max-w-xl mx-auto bg-[#15191F] border border-[#282E37] p-5 space-y-4">
           <div className="border-b border-[#282E37] pb-3 flex items-center justify-between">
@@ -189,7 +210,7 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                 onChange={(e) => setSelectedCustomerId(e.target.value)}
                 className="w-full bg-[#101318] border border-[#282E37] px-3 py-2 text-xs font-mono text-[#E8EBF0] outline-none focus:border-[#E5AC58]"
               >
-                {customers.map((c) => (
+                {visibleCustomers.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name} ({c.businessName || c.code}) — {c.state}
                   </option>
@@ -324,14 +345,14 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
             <div className="bg-[#15191F] border border-[#282E37]">
               <div className="p-3 border-b border-[#282E37] flex items-center justify-between">
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#E8EBF0]">
-                  Active Order Review Queue
+                  {isSalesman ? 'My Submitted Orders' : 'Active Order Review Queue'}
                 </span>
                 <span className="text-[11px] font-mono text-[#8993A1]">
                   Sorted by status
                 </span>
               </div>
 
-              {orders.length === 0 ? (
+              {visibleOrders.length === 0 ? (
                 <div className="p-8 text-center text-xs font-mono text-[#8993A1]">
                   No sales orders in queue. Use "Mobile Order Entry" to create one.
                 </div>
@@ -349,7 +370,7 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#282E37]">
-                      {orders.map((ord) => {
+                      {visibleOrders.map((ord) => {
                         const isSelected = selectedOrder?.id === ord.id;
                         const totalPkts = ord.items.reduce((s, i) => s + i.quantity, 0);
 
@@ -471,18 +492,19 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                   </div>
                 </div>
 
-                {/* Admin Workflow Action Buttons */}
-                {currentUser.role !== 'AUDITOR' && (
-                  <div className="space-y-2 pt-2 border-t border-[#282E37]">
-                    {selectedOrder.stockShortageCount > 0 && selectedOrder.status !== 'DISPATCHED' && (
-                      <div className="p-2.5 bg-[#F06B6B]/10 border border-[#F06B6B]/30 space-y-1.5">
-                        <div className="text-[11px] font-mono text-[#F06B6B] font-bold flex items-center gap-1.5">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          <span>Stock Shortage Detected ({selectedOrder.items.find(i => i.shortageQuantity > 0)?.shortageQuantity} pkts)</span>
-                        </div>
-                        <p className="text-[10px] text-[#8993A1]">
-                          Dispatch is blocked until stock is produced. Launch 1 batch to replenish finished goods.
-                        </p>
+                <div className="space-y-2 pt-2 border-t border-[#282E37]">
+                  {selectedOrder.stockShortageCount > 0 && selectedOrder.status !== 'DISPATCHED' && (
+                    <div className="p-2.5 bg-[#F06B6B]/10 border border-[#F06B6B]/30 space-y-1.5">
+                      <div className="text-[11px] font-mono text-[#F06B6B] font-bold flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        <span>Stock Shortage Detected ({selectedOrder.items.find(i => i.shortageQuantity > 0)?.shortageQuantity} pkts)</span>
+                      </div>
+                      <p className="text-[10px] text-[#8993A1]">
+                        {isSalesman
+                          ? 'The factory has 88 packets available. Your 120-packet order needs 32 more before dispatch.'
+                          : 'Dispatch is blocked until stock is produced. Launch 1 batch to replenish finished goods.'}
+                      </p>
+                      {canLaunchProduction && (
                         <button
                           type="button"
                           onClick={() => onNavigate('production-studio')}
@@ -490,9 +512,18 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                         >
                           Launch Production Run →
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                  )}
 
+                  {isSalesman && selectedOrder.status !== 'DISPATCHED' && selectedOrder.stockShortageCount === 0 && (
+                    <div className="p-2.5 bg-[#72A9E8]/10 border border-[#72A9E8]/25 text-[11px] text-[#315f92] rounded">
+                      Order sent to the factory. An admin will review and update its status here.
+                    </div>
+                  )}
+
+                  {canManageOrders && (
+                    <>
                     {selectedOrder.status === 'SUBMITTED' && (
                       <div className="space-y-1.5">
                         <button
@@ -558,8 +589,9 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
                         ✓ Dispatched & Stock Reconciled
                       </div>
                     )}
-                  </div>
-                )}
+                    </>
+                  )}
+                </div>
               </div>
             ) : null}
           </div>
