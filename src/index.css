@@ -622,6 +622,19 @@ html:not(.dark) .role-selected-dot { background: #d94e37; box-shadow: 0 0 0 4px 
 html:not(.dark) .login-input-wrap { border-color: rgba(216,199,185,.84); background: rgba(255,255,255,.72); color: #8d776d; }
 html:not(.dark) .login-input-wrap:focus-within { border-color: #df8067; box-shadow: 0 0 0 4px rgba(218,88,59,.11), inset 0 1px rgba(255,255,255,.96); }
 html:not(.dark) .login-input-wrap input { color: #382b28 !important; font-family: 'Outfit', sans-serif; }
+html:not(.dark) .login-input-wrap select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0 !important;
+  outline: 0;
+  background: transparent !important;
+  color: #382b28 !important;
+  box-shadow: none !important;
+  font: 500 12px 'Outfit', sans-serif;
+}
+html:not(.dark) .login-input-wrap select option { color: #382b28; background: #fffaf3; }
 html:not(.dark) .login-helper { color: #83716a; }
 html:not(.dark) .login-helper code { border-color: #f0debd; background: rgba(255,247,223,.82); color: #975b18; }
 html:not(.dark) .login-submit {

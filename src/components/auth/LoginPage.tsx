@@ -37,6 +37,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ profiles, onLogin }) => {
   const [password, setPassword] = useState(demoPassword);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const roleProfiles = profiles.filter((profile) => profile.role === selectedRole && profile.isActive);
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role);
@@ -113,6 +114,30 @@ export const LoginPage: React.FC<LoginPageProps> = ({ profiles, onLogin }) => {
                   </button>
                 ))}
               </div>
+
+              {roleProfiles.length > 1 && (
+                <>
+                  <label className="login-field-label" htmlFor="login-account">SALESPERSON ACCOUNT</label>
+                  <div className="login-input-wrap">
+                    <ShoppingBag size={17} aria-hidden="true" />
+                    <select
+                      id="login-account"
+                      value={email}
+                      onChange={(event) => {
+                        setEmail(event.target.value);
+                        setError('');
+                      }}
+                      aria-label="Choose salesperson account"
+                    >
+                      {roleProfiles.map((profile) => (
+                        <option key={profile.id} value={profile.email}>
+                          {profile.fullName} · {profile.email}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
 
               <label className="login-field-label" htmlFor="login-email">WORK EMAIL</label>
               <div className="login-input-wrap">
