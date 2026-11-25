@@ -25,16 +25,14 @@ Generic ERPs and accounting software treat inventory as a passive spreadsheet ce
 
 ## 2. Visual Identity & Interface
 
-The interface uses a light, operations-focused palette designed for long desktop sessions and clear shop-floor status checks:
-- **Canvas:** `#F4F6F1` warm sage-white
-- **Panels:** `#FFFFFF` with soft borders and subtle elevation
-- **Primary Text:** `#202C24` deep charcoal green
-- **Secondary Text:** `#68766C` muted leaf gray
-- **Primary Accent:** `#2F7551` factory green
-- **Saffron Accent:** `#96601F` for production and benchmark highlights
-- **Status Colors:** Green for healthy, amber for warnings, red for critical exceptions, and blue for informational states
+The interface uses a bright, energetic light palette with frosted glass surfaces and colorful ambient light:
+- **Canvas:** cool porcelain with soft coral, violet, blue, and citrus light effects
+- **Panels:** translucent white glass with blur, fine highlights, and soft shadows
+- **Primary Accent:** violet-to-blue gradient for sign-in and primary actions
+- **Status Colors:** teal for healthy, amber for warnings, red for critical exceptions, and blue for informational states
+- **Typography:** DM Sans for the interface and Space Grotesk for display headings
 
-The command center prioritizes the benchmark workflow with a production overview, live operating metrics, stock and dispatch pipeline, variance alerts, and recent orders. Role-based navigation keeps the relevant actions close to each user’s daily work.
+The role-based login opens the command center after a valid demo account is selected. The dashboard prioritizes the benchmark workflow with live operating metrics, stock and dispatch pipeline, variance alerts, and recent orders. Layouts adapt to desktop, tablet, and mobile screens.
 
 ---
 
@@ -145,6 +143,8 @@ The Audit Room provides read-only verification across 17 distinct reports, each 
 ## 6. Demo Users & Role Matrix
 
 You can switch between evaluator roles with 1 click using the Role Simulation panel in the sidebar:
+
+At the opening login page, select the role and use that profile’s email from the table below. The demo password for all sample accounts is `noir2026`. This is a client-side prototype sign-in for evaluation only, not production authentication.
 
 | Role | Demo User Name | Demo Email | Primary Scope |
 | :--- | :--- | :--- | :--- |

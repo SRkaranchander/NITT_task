@@ -22,6 +22,7 @@ import {
   Shield,
   Layers,
   ChevronDown,
+  LogOut,
 } from 'lucide-react';
 import { useCurrentUser, useDeviations, useInventory } from '../../services/db/useDatabase';
 import { UserRole } from '../../types';
@@ -33,6 +34,7 @@ interface SidebarProps {
   onToggleCollapse: () => void;
   isMobileOpen?: boolean;
   onCloseMobile?: () => void;
+  onSignOut?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -42,6 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
   isMobileOpen,
   onCloseMobile,
+  onSignOut,
 }) => {
   const { currentUser, setRole } = useCurrentUser();
   const { alerts } = useDeviations();
@@ -278,31 +281,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-3 border-t border-[#282E37] bg-[#0B0D10]/60 relative">
           {!isCollapsed ? (
             <div>
-              <button
-                onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-                className="w-full flex items-center justify-between p-2 rounded bg-[#15191F] border border-[#282E37] hover:border-[#363E4A] transition-colors text-left"
-              >
-                <div className="flex items-center gap-2.5 overflow-hidden">
-                  <div className="w-7 h-7 rounded bg-[#1C2129] border border-[#282E37] flex items-center justify-center font-mono text-xs font-bold text-[#E5AC58] shrink-0">
-                    {currentUser.fullName.charAt(0)}
-                  </div>
-                  <div className="leading-tight truncate">
-                    <div className="text-xs font-semibold text-[#E8EBF0] truncate">
-                      {currentUser.fullName}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setRoleMenuOpen(!roleMenuOpen)}
+                  className="min-w-0 flex-1 flex items-center justify-between p-2 rounded bg-[#15191F] border border-[#282E37] hover:border-[#363E4A] transition-colors text-left"
+                >
+                  <div className="flex items-center gap-2.5 overflow-hidden">
+                    <div className="w-8 h-8 rounded-lg bg-[#1C2129] border border-[#282E37] flex items-center justify-center font-mono text-xs font-bold text-[#E5AC58] shrink-0">
+                      {currentUser.fullName.charAt(0)}
                     </div>
-                    <div className="text-[10px] font-mono text-[#8993A1] flex items-center gap-1 mt-0.5">
-                      <Shield className="w-2.5 h-2.5 text-[#E5AC58]" />
-                      <span>{currentUser.role}</span>
+                    <div className="leading-tight truncate">
+                      <div className="text-xs font-semibold text-[#E8EBF0] truncate">
+                        {currentUser.fullName}
+                      </div>
+                      <div className="text-[10px] font-mono text-[#8993A1] flex items-center gap-1 mt-0.5">
+                        <Shield className="w-2.5 h-2.5 text-[#E5AC58]" />
+                        <span>{currentUser.role}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <ChevronDown
-                  className={clsx(
-                    'w-3.5 h-3.5 text-[#8993A1] transition-transform shrink-0',
-                    roleMenuOpen && 'rotate-180'
-                  )}
-                />
-              </button>
+                  <ChevronDown
+                    className={clsx(
+                      'w-3.5 h-3.5 text-[#8993A1] transition-transform shrink-0',
+                      roleMenuOpen && 'rotate-180'
+                    )}
+                  />
+                </button>
+                <button
+                  onClick={onSignOut}
+                  className="sign-out-button w-9 h-9 shrink-0 flex items-center justify-center rounded-lg border border-[#282E37] bg-[#15191F] text-[#8993A1] hover:text-[#F06B6B]"
+                  title="Sign out"
+                  aria-label="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
 
               {/* Role Simulation Dropdown */}
               {roleMenuOpen && (
@@ -337,13 +350,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
               )}
             </div>
           ) : (
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-2">
               <button
                 onClick={() => setRoleMenuOpen(!roleMenuOpen)}
                 className="w-8 h-8 rounded bg-[#15191F] border border-[#282E37] flex items-center justify-center text-[#E5AC58] font-mono text-xs font-bold hover:border-[#E5AC58] transition-colors"
                 title={`Current Role: ${currentUser.role}. Click to switch.`}
               >
                 {currentUser.role.charAt(0)}
+              </button>
+              <button
+                onClick={onSignOut}
+                className="sign-out-button w-8 h-8 rounded-lg border border-[#282E37] bg-[#15191F] flex items-center justify-center text-[#8993A1] hover:text-[#F06B6B]"
+                title="Sign out"
+                aria-label="Sign out"
+              >
+                <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
           )}

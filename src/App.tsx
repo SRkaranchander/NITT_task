@@ -14,8 +14,16 @@ import { Purchases } from './components/purchases/Purchases';
 import { CostIntelligence } from './components/costing/CostIntelligence';
 import { AuditRoom } from './components/audit/AuditRoom';
 import { PeopleAccess } from './components/people/PeopleAccess';
+import { LoginPage } from './components/auth/LoginPage';
+import { useDatabase } from './services/db/useDatabase';
+import { db } from './services/db/store';
+import { UserProfile } from './types';
 
 export const App: React.FC = () => {
+  const { profiles } = useDatabase();
+  const [isAuthenticated, setIsAuthenticated] = useState(() =>
+    typeof window !== 'undefined' && window.localStorage.getItem('noir-demo-auth') === 'active'
+  );
   const [currentTab, setCurrentTab] = useState('command-center');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -25,6 +33,21 @@ export const App: React.FC = () => {
   const handleNavigate = (tabId: string) => {
     setCurrentTab(tabId);
   };
+
+  const handleLogin = (profile: UserProfile) => {
+    db.setCurrentUser(profile);
+    window.localStorage.setItem('noir-demo-auth', 'active');
+    setIsAuthenticated(true);
+  };
+
+  const handleSignOut = () => {
+    window.localStorage.removeItem('noir-demo-auth');
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return <LoginPage profiles={profiles} onLogin={handleLogin} />;
+  }
 
   const renderContent = () => {
     switch (currentTab) {
@@ -65,6 +88,7 @@ export const App: React.FC = () => {
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         isMobileOpen={isMobileMenuOpen}
         onCloseMobile={() => setIsMobileMenuOpen(false)}
+        onSignOut={handleSignOut}
       />
 
       {/* Main Content Area */}
