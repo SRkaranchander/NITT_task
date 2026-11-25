@@ -74,9 +74,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ profiles, onLogin }) => {
           </a>
 
           <div className="login-story-copy">
-            <div className="login-eyebrow"><Sparkles size={15} /> ORDER TO AUDIT, IN ONE FLOW</div>
-            <h1>Make every move<br />count.</h1>
-            <p>One bright workspace for orders, production, stock and accounts. Sign in with your role to pick up exactly where your team works.</p>
+            <div className="login-eyebrow"><Sparkles size={15} /> MADE FOR THE FOOD FACTORY</div>
+            <h1>Good food.<br />Clear numbers.</h1>
+            <p>Murukku on the line, flour in the store, an invoice on its way. Keep every part of the work connected from the first order to the month-end audit.</p>
           </div>
 
           <div className="login-feature-row">
@@ -91,10 +91,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ profiles, onLogin }) => {
           <div className="login-card">
             <div className="login-card-heading">
               <div className="login-heading-icon"><LockKeyhole size={18} /></div>
-              <div className="login-demo-tag">DEMO ACCESS</div>
+              <div className="login-demo-tag">FACTORY ACCESS</div>
             </div>
-            <h2>Welcome back</h2>
-            <p className="login-card-subtitle">Choose your workspace role to continue.</p>
+            <h2>Step inside</h2>
+            <p className="login-card-subtitle">Choose your station and sign in to NOIR.</p>
 
             <form onSubmit={handleSubmit}>
               <div className="login-field-label">YOUR ROLE</div>
@@ -131,12 +131,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ profiles, onLogin }) => {
 
               <div className="login-helper"><span>Demo password</span><code>{demoPassword}</code></div>
               {error && <div className="login-error" role="alert">{error}</div>}
-              <button className="login-submit" type="submit">Enter workspace <ArrowRight size={17} /></button>
+              <button className="login-submit" type="submit">Enter factory <ArrowRight size={17} /></button>
             </form>
 
             <div className="login-security-note"><ShieldCheck size={15} /> Role-based demo access <span>·</span> Sample data only</div>
           </div>
-          <div className="login-card-caption"><Factory size={14} /> Crafted for the rhythm of a real factory</div>
+          <div className="login-card-caption"><Factory size={14} /> Tiruchirappalli · Tamil Nadu</div>
         </section>
       </div>
       <div className="login-footer"><span>NOIR FACTORY OS</span><span>Every material. Every movement. Accounted for.</span><span>v1.0 · NIT TIRUCHIRAPPALLI</span></div>

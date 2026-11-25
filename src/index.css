@@ -458,3 +458,183 @@ html:not(.dark) .app-header button:hover { box-shadow: 0 5px 14px rgba(42,73,53,
   .login-orb, html:not(.dark) .dashboard-hero::after, html:not(.dark) .dashboard-hero button:first-child { animation: none !important; }
   *, *::before, *::after { scroll-behavior: auto !important; }
 }
+
+/* NOIR's house style: warm paper, chilli, turmeric, and editorial type. */
+html:not(.dark) {
+  --canvas: #f8f2e8;
+  --surface-soft: #fffaf2;
+  --ink: #2b2222;
+  --muted: #766864;
+  --line: #e9ded2;
+  --accent: #bd3e32;
+}
+html:not(.dark) body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #f8f2e8;
+  background-image:
+    radial-gradient(ellipse at 4% 3%, rgba(249, 130, 98, .18), transparent 28rem),
+    radial-gradient(ellipse at 94% 4%, rgba(255, 194, 75, .22), transparent 31rem),
+    radial-gradient(ellipse at 65% 82%, rgba(121, 164, 202, .12), transparent 32rem);
+}
+html:not(.dark) .app-main {
+  background-image: radial-gradient(ellipse at 86% 0%, rgba(255, 204, 150, .18), transparent 30rem) !important;
+}
+html:not(.dark) button:focus-visible,
+html:not(.dark) [role="button"]:focus-visible { outline-color: rgba(199, 69, 50, .26); }
+html:not(.dark) h1,
+html:not(.dark) h2 { font-family: 'Fraunces', Georgia, serif; }
+html:not(.dark) h3,
+html:not(.dark) .font-mono { font-family: 'Outfit', sans-serif; }
+html:not(.dark) [class*="text-[#E5AC58]"] { color: #9a5b16 !important; }
+html:not(.dark) [class*="text-[#63D39B]"] { color: #087b83 !important; }
+html:not(.dark) [class*="text-[#F0B44D]"] { color: #93600d !important; }
+html:not(.dark) [class*="text-[#F06B6B]"] { color: #b44236 !important; }
+html:not(.dark) [class*="text-[#72A9E8]"] { color: #315f92 !important; }
+html:not(.dark) ::selection { background: rgba(202, 68, 51, .18); color: #2b2222; }
+
+html:not(.dark) .app-sidebar {
+  background: rgba(255, 251, 244, .78) !important;
+  border-color: rgba(255,255,255,.92) !important;
+  box-shadow: 10px 0 34px rgba(97, 65, 44, .07), inset -1px 0 rgba(255,255,255,.86);
+}
+html:not(.dark) .app-header {
+  background: rgba(255, 250, 241, .76) !important;
+  border-color: rgba(255,255,255,.9) !important;
+  box-shadow: 0 8px 28px rgba(97, 65, 44, .065), inset 0 -1px rgba(255,255,255,.88);
+}
+html:not(.dark) [class*="bg-[#15191F]"][class*="border"] {
+  background-color: rgba(255, 252, 247, .72) !important;
+  border-color: rgba(255,255,255,.9) !important;
+  box-shadow: 0 14px 36px rgba(80, 55, 37, .075), 0 2px 6px rgba(80, 55, 37, .035), inset 0 1px rgba(255,255,255,.98);
+}
+html:not(.dark) div[class*="bg-[#101318]"][class*="border"] {
+  background-color: rgba(255, 253, 249, .72) !important;
+  border-color: rgba(255,255,255,.85) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.95), 0 4px 14px rgba(80,55,37,.04);
+}
+html:not(.dark) aside button[class*="border-l-[#E5AC58]"] {
+  background: linear-gradient(100deg, #fff0e8, #fff6e9) !important;
+  color: #9b362d !important;
+  border-color: #f3d5c9 !important;
+  border-left: 3px solid #d74c39 !important;
+  box-shadow: inset 0 0 0 1px rgba(215, 76, 57, .035);
+}
+html:not(.dark) .brand-mark {
+  background: linear-gradient(145deg, #e9513d, #b92f36) !important;
+  border-color: #d74c39 !important;
+  box-shadow: 0 7px 17px rgba(196, 63, 49, .23);
+}
+html:not(.dark) .dashboard-page .dashboard-hero {
+  border-color: rgba(255,255,255,.94) !important;
+  background: linear-gradient(110deg, rgba(255,250,239,.94), rgba(255,231,207,.8) 49%, rgba(246,225,224,.82) 76%, rgba(230,239,247,.78)) !important;
+  box-shadow: 0 22px 52px rgba(162, 84, 54, .12), 0 3px 12px rgba(52, 93, 136, .06), inset 0 1px rgba(255,255,255,.98) !important;
+}
+html:not(.dark) .dashboard-page .dashboard-hero::after {
+  border-color: rgba(197, 62, 47, .19);
+  box-shadow: 0 0 0 32px rgba(244, 161, 54, .075), 0 0 0 68px rgba(197, 62, 47, .045), 0 0 0 104px rgba(74,139,186,.035);
+}
+html:not(.dark) .dashboard-hero h1 { color: #392524 !important; }
+html:not(.dark) .dashboard-hero button:first-child {
+  background: linear-gradient(118deg, #df4d3b, #c53738 58%, #ed7932) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 23px rgba(196, 63, 49, .27) !important;
+}
+html:not(.dark) .dashboard-hero button:first-child:hover {
+  background: linear-gradient(118deg, #cc4032, #ad2932 58%, #da6428) !important;
+}
+html:not(.dark) .metric-card { border-radius: 19px !important; }
+html:not(.dark) .metric-value { color: #382827 !important; }
+html:not(.dark) .metric-icon { background: linear-gradient(145deg, #fff0e7, #fff4d9); box-shadow: inset 0 1px rgba(255,255,255,.98), 0 5px 12px rgba(188,98,50,.09); }
+html:not(.dark) .metric-card:nth-child(2) .metric-icon { background: linear-gradient(145deg,#e6f4f8,#edf0ff); }
+html:not(.dark) .metric-card:nth-child(3) .metric-icon { background: linear-gradient(145deg,#f2eaff,#fff0e7); }
+html:not(.dark) .metric-card:nth-child(4) .metric-icon { background: linear-gradient(145deg,#fff1d4,#fff4ea); }
+html:not(.dark) .metric-card:nth-child(5) .metric-icon { background: linear-gradient(145deg,#fde8e5,#f5eaff); }
+
+html:not(.dark) .login-portal {
+  color: #2b2222;
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #fff9ef 0%, #f7efe4 48%, #f1f1f4 100%);
+}
+html:not(.dark) .login-orb-one { background: radial-gradient(circle at 40% 50%, rgba(240, 92, 67, .37), rgba(255, 192, 93, .2) 56%, transparent 72%); }
+html:not(.dark) .login-orb-two { background: radial-gradient(circle at 45% 45%, rgba(141, 88, 119, .18), rgba(86, 151, 184, .22) 48%, transparent 72%); }
+html:not(.dark) .login-orb-three { background: radial-gradient(circle, rgba(255, 192, 68, .31), rgba(243, 118, 74, .14) 52%, transparent 72%); }
+html:not(.dark) .login-grid-texture {
+  opacity: .32;
+  background-image: radial-gradient(rgba(129, 83, 55, .13) .7px, transparent .7px);
+  background-size: 16px 16px;
+  mask-image: linear-gradient(110deg, black, transparent 72%);
+}
+html:not(.dark) .login-brand-mark {
+  background: linear-gradient(145deg, #ee674b, #b83439 68%, #762f42) !important;
+  box-shadow: 0 10px 24px rgba(187, 59, 49, .25), inset 0 1px rgba(255,255,255,.46);
+}
+html:not(.dark) .login-brand-mark span { color: #ffd46f; }
+html:not(.dark) .login-brand strong { font-family: 'Outfit', sans-serif; letter-spacing: .19em; }
+html:not(.dark) .login-eyebrow {
+  border-color: rgba(255,255,255,.95);
+  color: #a63e2f;
+  background: rgba(255,252,245,.7);
+  box-shadow: 0 5px 20px rgba(160, 79, 46, .08);
+}
+html:not(.dark) .login-story h1 {
+  color: #382523;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -.06em;
+}
+html:not(.dark) .login-story h1::first-line { color: #382523; }
+html:not(.dark) .login-story-copy > p { color: #76645d; }
+html:not(.dark) .login-feature-row {
+  border-color: rgba(255,255,255,.9);
+  background: rgba(255,251,244,.65);
+  box-shadow: 0 12px 30px rgba(107,69,43,.07), inset 0 1px rgba(255,255,255,.92);
+}
+html:not(.dark) .login-feature-icon { color: #b54a35; background: linear-gradient(145deg,#fff0e3,#fff4d8); }
+html:not(.dark) .login-feature-row strong { color: #3b2c29; }
+html:not(.dark) .login-feature-row span { color: #806f69; }
+html:not(.dark) .login-feature-check { color: #087c83; }
+html:not(.dark) .login-live-dot { background: #e55a3d; box-shadow: 0 0 0 4px rgba(229,90,61,.14), 0 0 14px rgba(229,90,61,.55); }
+html:not(.dark) .login-card {
+  border-color: rgba(255,255,255,.96);
+  background: rgba(255, 251, 244, .72);
+  box-shadow: 0 28px 80px rgba(109,67,46,.13), 0 7px 20px rgba(81,92,118,.06), inset 0 1px rgba(255,255,255,.99);
+}
+html:not(.dark) .login-heading-icon { color: #a23b31; background: linear-gradient(145deg,#ffede2,#fff0d6); }
+html:not(.dark) .login-demo-tag { border-color: rgba(191,66,48,.17); background: rgba(216,86,56,.08); color: #a13d31; }
+html:not(.dark) .login-card h2 { color: #382523; font-family: 'Fraunces', Georgia, serif; font-weight: 600; }
+html:not(.dark) .login-card-subtitle, html:not(.dark) .login-field-label { color: #786964; }
+html:not(.dark) .login-role-option {
+  border-color: rgba(255,255,255,.95); background: rgba(255,254,251,.65); color: #766d69;
+  box-shadow: 0 4px 12px rgba(90,62,47,.04);
+}
+html:not(.dark) .login-role-option > svg { color: #8b7468; }
+html:not(.dark) .login-role-option span strong { color: #433330; }
+html:not(.dark) .login-role-option span small { color: #887a74; }
+html:not(.dark) .login-role-option:hover { border-color: #efb8a7; background: rgba(255,255,255,.88); }
+html:not(.dark) .login-role-option.is-selected {
+  border-color: rgba(203,72,52,.42);
+  background: linear-gradient(120deg, rgba(255,239,226,.96), rgba(255,247,222,.94));
+  box-shadow: 0 6px 18px rgba(188,73,47,.1), inset 0 0 0 1px rgba(255,255,255,.8);
+}
+html:not(.dark) .login-role-option.is-selected > svg { color: #c14333; }
+html:not(.dark) .login-role-option.is-selected span strong { color: #a23a31; }
+html:not(.dark) .role-selected-dot { background: #d94e37; box-shadow: 0 0 0 4px rgba(217,78,55,.12); }
+html:not(.dark) .login-input-wrap { border-color: rgba(216,199,185,.84); background: rgba(255,255,255,.72); color: #8d776d; }
+html:not(.dark) .login-input-wrap:focus-within { border-color: #df8067; box-shadow: 0 0 0 4px rgba(218,88,59,.11), inset 0 1px rgba(255,255,255,.96); }
+html:not(.dark) .login-input-wrap input { color: #382b28 !important; font-family: 'Outfit', sans-serif; }
+html:not(.dark) .login-helper { color: #83716a; }
+html:not(.dark) .login-helper code { border-color: #f0debd; background: rgba(255,247,223,.82); color: #975b18; }
+html:not(.dark) .login-submit {
+  background: linear-gradient(110deg, #ef6547 0%, #cb3d39 54%, #e98231 100%);
+  box-shadow: 0 12px 25px rgba(191, 67, 49, .25), inset 0 1px rgba(255,255,255,.3);
+  font-family: 'Outfit', sans-serif;
+}
+html:not(.dark) .login-submit:hover { box-shadow: 0 16px 30px rgba(191,67,49,.31), inset 0 1px rgba(255,255,255,.38); }
+html:not(.dark) .login-submit:focus-visible { outline-color: rgba(199,69,50,.28); }
+html:not(.dark) .login-security-note, html:not(.dark) .login-card-caption, html:not(.dark) .login-footer { color: #82736c; }
+html:not(.dark) .login-security-note svg { color: #087b83; }
+html:not(.dark) .login-card-caption svg { color: #c64c37; }
+html:not(.dark) .login-footer span:first-child { color: #a33c32; }
+
+@keyframes login-float { from { transform: translate3d(-8px,2px,0) scale(1); } to { transform: translate3d(16px,12px,0) scale(1.05); } }
+@keyframes soft-glow { 0%, 100% { box-shadow: 0 8px 18px rgba(196,63,49,.2); } 50% { box-shadow: 0 10px 26px rgba(196,63,49,.35), 0 0 0 5px rgba(245,161,79,.12); } }

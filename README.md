@@ -25,12 +25,12 @@ Generic ERPs and accounting software treat inventory as a passive spreadsheet ce
 
 ## 2. Visual Identity & Interface
 
-The interface uses a bright, energetic light palette with frosted glass surfaces and colorful ambient light:
-- **Canvas:** cool porcelain with soft coral, violet, blue, and citrus light effects
-- **Panels:** translucent white glass with blur, fine highlights, and soft shadows
-- **Primary Accent:** violet-to-blue gradient for sign-in and primary actions
-- **Status Colors:** teal for healthy, amber for warnings, red for critical exceptions, and blue for informational states
-- **Typography:** DM Sans for the interface and Space Grotesk for display headings
+The interface takes its cues from a small-batch South Indian food factory: warm paper, chilli, turmeric, and printed-label details, with glass used lightly for depth.
+- **Canvas:** warm ivory with restrained coral, turmeric, and sky-blue light
+- **Panels:** translucent warm-white surfaces with fine borders and soft shadows
+- **Primary Accent:** chilli red with a saffron-orange highlight
+- **Status Colors:** teal for healthy, amber for warnings, red for critical exceptions, and indigo for informational states
+- **Typography:** Outfit for the interface and Fraunces for editorial headings
 
 The role-based login opens the command center after a valid demo account is selected. The dashboard prioritizes the benchmark workflow with live operating metrics, stock and dispatch pipeline, variance alerts, and recent orders. Layouts adapt to desktop, tablet, and mobile screens.
 

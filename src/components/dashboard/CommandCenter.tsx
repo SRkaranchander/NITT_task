@@ -89,7 +89,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#E5AC58]">
-                Factory Overview
+                NOIR Operations Desk
               </span>
               <span className="text-[#363E4A]">•</span>
               <span className="text-xs text-[#8993A1] flex items-center gap-1 font-mono">
@@ -99,7 +99,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onNavigate }) => {
             </div>
 
             <h1 className="text-xl md:text-2xl font-bold font-mono text-[#E8EBF0] tracking-tight">
-              Good evening, {currentUser.fullName}
+              The factory, at a glance
             </h1>
 
             <div className="flex flex-wrap items-center gap-3 mt-2 text-xs font-mono text-[#8993A1]">
