@@ -35,9 +35,7 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
   const canCreateOrders = isSalesman || canManageOrders;
   const canLaunchProduction = currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'PRODUCTION';
   const visibleOrders = isSalesman ? orders.filter((order) => order.salesmanId === currentUser.id) : orders;
-  const visibleCustomers = isSalesman
-    ? customers.filter((customer) => customer.salesmanId === currentUser.id)
-    : customers;
+  const visibleCustomers = customers;
 
   const [activeTab, setActiveTab] = useState<'queue' | 'new_order'>('queue');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -203,7 +201,7 @@ export const SalesOrders: React.FC<SalesOrdersProps> = ({ onNavigate }) => {
             {/* Step 1: Customer */}
             <div>
               <label className="block text-[11px] font-mono text-[#8993A1] mb-1">
-                1. Select Assigned Customer
+                1. Select Retailer / Distributor
               </label>
               <select
                 value={selectedCustomerId}
